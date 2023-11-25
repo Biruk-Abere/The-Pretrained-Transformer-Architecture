@@ -333,7 +333,7 @@ In summary , multiplying the concatenated attention outputs by a weight matrix W
 
 ## THE TRANSFORMER ARCHITECTURE 
 
-<!-- ![Alt](image29.png)    -->
+![Alt](image29.png)   
 
 Questions:-
 
