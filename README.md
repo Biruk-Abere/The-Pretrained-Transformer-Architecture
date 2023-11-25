@@ -121,13 +121,13 @@ Now the question is when we are trying to generate the first word (“Jane”), 
 
 And we also come up with a second attention weights, let’s call it α<1,2> which tells us while we are trying to compute the first word “Jane” how much attention should be paying to this second word from the input sequence and so on and this will tell us, what is exactly the context c[1] we should be paying attention to and that is input to our first decoder recurrent neural network unit and then try to generate the first word. 
 
-Questions :- 
+Questions:- 
 
-   • How exactly is this context defined ? 
+    • How exactly is this context defined ? 
      
-   • How do we compute this attention weight alpha ? 
+    • How do we compute this attention weight alpha ? 
   
-   • How does the attention model solve the problem of the encoder and decoder, in the translation of longer sentences ?
+    • How does the attention model solve the problem of the encoder and decoder, in the translation of longer sentences ?
 
 
 The α<t,t’> allows it on every time step to look only at a local window of the French sentence to pay attention to when generating a specific English word. Now, let’s formalize the attention model. And for the forward recurrence we would have a(forward)  and a(backward) for the backward recurrence. Technically, a<o> in the forward step and a<6> for the backward step will be a vector of zeros and at every time step even though we have the features computed from the forward recurrence and from the backward recurrence in the bi-directional RNN (a<0> forward , a<6> backward), we are going to use a<t’> for both of these concatenated together. 
