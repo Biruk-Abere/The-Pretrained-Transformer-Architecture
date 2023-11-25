@@ -62,7 +62,7 @@
 * Future Directions and Applications of Transformer Models
 
 
-***Authors :- Bezawit Abebaw and Biruk Abere ***
+**Authors :- Bezawit Abebaw and Biruk Abere**
 
 ## MACHINE TRANSLATION USING ENCODER DECODER FRAMEWORK 
 
