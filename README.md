@@ -62,7 +62,9 @@
 * Future Directions and Applications of Transformer Models
 
 
+
 **Authors :- Bezawit Abebaw and Biruk Abere**
+
 
 ## MACHINE TRANSLATION USING ENCODER DECODER FRAMEWORK 
 
@@ -278,9 +280,9 @@ Now we have been using the third word, l’Afrique as a running example, but we 
 
 ## MULTI-HEAD ATTENTION MECHANISM 
 
-![Alt](image6.png)
-
 Multi head attention is basically a big for loop over the self attention mechanism that we learned before, and each time we calculate the self attention for a sequence is called a head and the name multi head attention refers to a normal self attention but a bunch of times. 
+
+![Alt](image6.png)
 
 Remember that we got the vectors Q , K and V for each of the input terms, multiplying them by a few matrices Wq , Wk , Wv. So with the computation the word visite gives the best answer to the query “what’s happening ” which is why we highlighted with the blue arrow to represent that the inner product between the key for l’Afrique has the highest value with the query for visite. So this is how we get the representation for l’Afrique and we do the same for Jane, visite and for other words. So we end up with five vectors to represent the five words in the sequence. So this is a computation to carry out for the first of the several heads we use in multi head attention. And so we would step through exactly the same calculation that we had just now for l’Afrique and for other words and end up  with the same attention values , A<1> through A<5>, but now we’re going to do this not once but a handful of times. So rather than having one head , we may now have eight heads, which just means performing this whole calculation eight times. 
 
