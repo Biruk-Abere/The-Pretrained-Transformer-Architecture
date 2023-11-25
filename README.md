@@ -77,8 +77,7 @@ An RNN receives some input (which could be a word or character), feeds it throug
 
 These architectures were (continue to be) widely used for NLP tasks, speech processing and time series. One area where RNN’s played an important role was in the development of machine translation systems, where the objective is to map a sequence of words in one language to another. This kind of task is usually tackled with an encoder – decoder or sequence to sequence (seq2seq) architecture, which is well suited for situations where the input and output are both sequences of arbitrary length. The job of the encoder is to encode the information from the input sequence into a numerical representation that is often called the last hidden state (context vector). This state is then passed to the decoder, which generates the output sequence one at a time. 
 
-![Alt](image31.png)
-<img src = "image31.png" alt = "ALT" width = "800" height = "450">
+<img src = "image31.png" alt = "ALT" width = "800" height = "350">
 
 Although elegant in its simplicity, one weakness of this architecture is that the final hidden state of the encoder creates an information bottleneck: it has to represent the meaning of the whole input sequence in one long vector and this is all the decoder has access to when generating the output. This is especially challenging for long sentences, where information at the start of the sequence might be lost in the process of compressing everything to a single, fixed representation. As there may be too much detail and context to effectively encode in that single vector. 
 
