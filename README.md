@@ -62,16 +62,16 @@
 * Future Directions and Applications of Transformer Models
 
 
-Authors :- Bezawit Abebaw and Biruk Abere 
+## Authors :- Bezawit Abebaw and Biruk Abere 
 
 
-MACHINE TRANSLATION USING ENCODER DECODER FRAMEWORK 
+## MACHINE TRANSLATION USING ENCODER DECODER FRAMEWORK 
 
 Prior to transformers, recurrent architectures such as Long short term memories(LSTMs) and Gated Recurrent Unit (GRUs) were the state of the art in NLP. These architectures contain a feedback loop in the network connections that allow information to propagate from one step to another, making them ideal for modelling sequential data like text. 
 
 An RNN receives some input (which could be a word or character), feeds it through the network and outputs a vector called the hidden state. At the same time, the model feeds some information back to itself through the feedback loop, which it can then use in the next step. These can be more clearly seen if we “unroll” the loop as shown on the right side of the figure. The RNN passes information about its state at each step to the next operation in the sequence. This allows an RNN to keep track of information from previous steps and use it for its output predictions. 
 
-
+![Alt](image12.png)
 
 These architectures were (continue to be) widely used for NLP tasks, speech processing and time series. One area where RNN’s played an important role was in the development of machine translation systems, where the objective is to map a sequence of words in one language to another. This kind of task is usually tackled with an encoder – decoder or sequence to sequence (seq2seq) architecture, which is well suited for situations where the input and output are both sequences of arbitrary length. The job of the encoder is to encode the information from the input sequence into a numerical representation that is often called the last hidden state (context vector). This state is then passed to the decoder, which generates the output sequence one at a time. 
 
@@ -82,7 +82,7 @@ Although elegant in its simplicity, one weakness of this architecture is that th
 
 Fortunately, there is a way out of this bottleneck by allowing the decoder to have access to all the encoder’s hidden states. This mechanism is to capture contextual information from the entire input sequence without a fixed-length bottleneck.  The general mechanism for this is called attention, and it is a key component in many modern neural network architectures. Understanding how attention was developed for RNN’s will put us in good shape to understand one of the main building blocks of the Transformer architecture. Transformers have become the foundation for many state of the art NLP models, like BERT and GPT-3, precisely because they mitigate the limitations described in the passage. They can handle longer sequences and capture information more effectively. 
 
-ATTENTION IS ALL YOU NEED 
+## ATTENTION IS ALL YOU NEED 
 
 The main idea behind attention is that instead of producing a single hidden state for the entire input sequence, the encoder outputs a hidden state at each step that the decoder can access. However, using all the states at the same time would create a huge input for the decoder, so some mechanism is needed to prioritise which states to use. This is where attention comes in, it lets the decoder assign a different amount of weight or “attention” to each of the encoder states at every decoding time step.
 
@@ -104,7 +104,7 @@ By focusing on which input tokens are most relevant at each time step, these att
 
 
 
-DEEP DIVE IN TO ATTENTION MECHANISMS
+## DEEP DIVE IN TO ATTENTION MECHANISMS
 
 Attention is a mechanism that was developed to improve the performance of the encoder decoder RNN on machine translation. The RNN is composed of two sub models, which is encoder and decoder. The encoder is responsible for stepping through the input time steps and encodes the entire sequence into a fixed length vector called a context vector. And the decoder is responsible for stepping through the output time steps reading from the context vector.
 
@@ -113,7 +113,7 @@ Attention is proposed as a solution to the limitation of the encoder decoder mod
 We introduce an extension to the encoder and decoder model which learns to align and translate jointly. Each time the proposed model generates a word in a translation, it searches for a set of positions in a source sentence where the most relevant information is concentrated. The model then predicts a target model based on the context vectors and all the previous generated target words. 
 
 
-THE PROBLEM OF LONG SENTENCES 
+## THE PROBLEM OF LONG SENTENCES 
 
 So given a very much long french sentence like :- 
 
@@ -124,7 +124,7 @@ Now the way human translator would translate the sentence is not to first read t
 
 
 
-FORMALIZE THE ATTENTION MODEL INTUITION
+## FORMALIZE THE ATTENTION MODEL INTUITION
 
 
 
@@ -141,6 +141,7 @@ Questions :-
     How do we compute this attention weight alpha ? 
       
     How does the attention model solve the problem of the encoder and decoder, in the translation of longer sentences ?
+
 The α<t,t’> allows it on every time step to look only at a local window of the French sentence to pay attention to when generating a specific English word. Now, let’s formalize the attention model. And for the forward recurrence we would have a(forward)  and a(backward) for the backward recurrence. Technically, a<o> in the forward step and a<6> for the backward step will be a vector of zeros and at every time step even though we have the features computed from the forward recurrence and from the backward recurrence in the bi-directional RNN (a<0> forward , a<6> backward), we are going to use a<t’> for both of these concatenated together. 
 
         a<t’> = (a<t’> forward + a<t’> backward)
@@ -174,14 +175,14 @@ This is essentially a softmax, to make sure that these weights sum to one if we 
 
 This is essentially a softmax, to make sure that these weights sum to one If we sum over t’. But the problem is we don’t know what the function is, so one thing we could do is just train whatever this function should be and trust back propagation, trust gradient descent to learn the right function. This neural network does a pretty decent job telling us how much attention y<t> should pay to a<t> and this formula makes sure that the attention weights sum to one.
 
-ATTENTION MODELS FOR IMAGE CAPTIONING 
+## ATTENTION MODELS FOR IMAGE CAPTIONING 
 
 
 
 
 How does the attention model enable us for the image captioning purpose ? These also applied to other problems as well as Image Captioning, the task is to look at the picture and write any caption for that picture.  We could have a very similar architecture, look at the picture and pay attention only to part of the picture at a time while you’re writing a caption for the picture. 
 
-THE PROBLEM WITH ATTENTION MECHANISM 
+## THE PROBLEM WITH ATTENTION MECHANISM 
 
 Although attention enabled the production of much better translations, there was still a major shortcoming with using recurrent models for the encoder and decoder : the computations are inherently sequential and can not be parallelized across the input sequence. 
 
@@ -189,7 +190,7 @@ Although attention enabled the production of much better translations, there was
 
 
 
-SELF ATTENTION MECHANISM
+## SELF ATTENTION MECHANISM
 
     • What is self attention ? 
       
@@ -252,9 +253,11 @@ V<3> = Wv X<3>
 
 These matrices Wq , Wk , Wv  are parameters of this learning algorithm and they allow you to pull these query, key and value vectors for each word but what are these query, key and value. We can think of them as a loose analogy to databases where we can have queries and key – value pairs.  
 
-X<1>  X<2>       X<3>       X<4>      X<5>
 
-Jane    Visite       l’Afrique      en        Septmbre  
+            * X<1>  X<2>       X<3>       X<4>      X<5>
+
+            * Jane    Visite       l’Afrique      en        Septmbre
+
 
 q<3> is a question that we get to ask about l’Afrique, so q<3> may represent like , what is happening there ? Is it a destination ? So what we are going to do is compute the inner product between q<3> and k<1> and this will tell us how good is an answer to the question of what’s happening in Africa and then we will compute the inner product between q<3> and k<2> and this intended to tell us how good is “visite” an answer to the question of “what Is happening in Africa” and so on for the other words, in the end the goal of this operation is to pull the most information that is needed to help us compute the most useful representation A<3>. 
 
@@ -287,7 +290,7 @@ SoftMax: The softmax function is applied to the scores, typically along each row
 
 MatMul (Matrix Multiplication): The softmax probabilities are then used to create a weighted sum of the value vectors. This is done by multiplying the normalized scores with the Value matrix V. The result is the output of the attention layer, which is a matrix where each row is a weighted sum of the value vectors, with the weights reflecting the relevance of each key to the query. 
 
-THE DIMENSION OF SELF ATTENTION 
+## THE DIMENSION OF SELF ATTENTION 
 
 
 
@@ -298,7 +301,7 @@ THE DIMENSION OF SELF ATTENTION
 
 
 
-MULTI-HEAD ATTENTION MECHANISM 
+## MULTI-HEAD ATTENTION MECHANISM 
 
 
 
@@ -347,7 +350,7 @@ Finally , we reshape this tensor back to the original shape of (batch_size , seq
 In summary , multiplying the concatenated attention outputs by a weight matrix W0 creates a linear transformation because it is a linear combination of the input features and learnable parameters of the weight matrix. 
 
 
-THE TRANSFORMER ARCHITECTURE 
+## THE TRANSFORMER ARCHITECTURE 
 
 
 
@@ -380,7 +383,7 @@ The transformer architecture uses several mechanisms to learn long – range dep
 
 5) Stacked Layers :- The Transformer uses a stack of multiple layers , each with its own self attention and feed – forward layers. This enables the model to capture increasingly complex relationships between the words in the input sentence and helps it learn long range dependencies. 
 
-POSITIONAL EMBEDDING 
+## POSITIONAL EMBEDDING 
 
 
 
@@ -400,7 +403,7 @@ In contrast, the Transformer architecture utilizes a self attention mechanism, w
 Since the attention mechanism considers all token in the input sequence in parallel, the Transformer architecture is more efficient and faster than traditional RNNs, and can process longer sequences without sacrificing performance. Additionally , the Transformer architecture has become a popular choice for various natural language processing tasks such as machine translation ,text generation , and language understanding , due to its superior performance and parallelizability. Here, positional information is added to the model explicitly to retain the information regarding the order of words in a sentence, positional encoding is the scheme through which the knowledge of the order of objects in a sequence is maintained. 
 
 
-HOW DOES POSITIONAL ENCODING WORKS ?
+## HOW DOES POSITIONAL ENCODING WORKS ?
 
 The Transformer architecture uses a positional encoding mechanism to inject position information into the input sequence so that the self attention mechanism can differentiate between tokens based on their position in the sequence. Since the self attention mechanism in the Transformer does not consider the order of the input sequence, it is important to incorporate the position of each token into the input representation. The positional encoding achieves this by adding a vector to the embedding of each token that encodes the position in the sequence. 
 
@@ -426,7 +429,7 @@ Moreover, the choice of sinusoidal function with different frequencies ensures t
 
 
 
-THE FORMULA OF POSITIONAL EMBEDDING 
+## THE FORMULA OF POSITIONAL EMBEDDING 
 
 So what we are going to do is, we are going to embed some arbitrary word and then we are going to have a positional encoding for the arbitrary location and then we are going to add the two together and this is going to give us our encoding that we are going to send to our first layer of the encoder. Positional encoding does not depend on the feature of any word, we are not looking at the word itself , we are only looking at the position of the word. 
 
@@ -453,7 +456,7 @@ The reason we use "10000" in the formula is to make sure each word gets a very d
 
 If it is small the frequency will be higher and the cyclic repetition would be faster(the period for being a cycle will be smaller ( faster ) since frequency and  period are inversely proportional ). This increases the probability of positional encoding of different positions to be similar. Large omega increases the probability that different positions will have unique encodings. 
 
-THE ENCODER OF THE TRANSFORMER ARCHITECTURE 
+## THE ENCODER OF THE TRANSFORMER ARCHITECTURE 
 
 
 
@@ -548,7 +551,7 @@ In the Transformer architecture , layer normalization is applied after self atte
 
 
 
-THE DECODER IN THE TRANSFORMER ARCHITECTURE 
+## THE DECODER IN THE TRANSFORMER ARCHITECTURE 
 
 
 The decoder shares several similarities with the encoder. The decoder also consists of a stack of N = 6 identical layers that are each composed of three sub layers. 
@@ -615,7 +618,7 @@ Differentiability: Softmax is a differentiable function, which means it allows t
 Amplifying Differences: Softmax amplifies the differences in the logits. Even small differences in the input scores can lead to large differences in the probability distribution. This helps the model to be more decisive in its predictions, making it less likely to be uncertain between multiple choices.
 Softmax turns the decoder's output into a clear, probabilistic prediction, allowing the Transformer model to select the most probable next element in the sequence it is generating.
 
-THE DIMENSION OF THE TRANSFORMER ARCHITECTURE
+## THE DIMENSION OF THE TRANSFORMER ARCHITECTURE
 
 
 
@@ -623,7 +626,7 @@ THE DIMENSION OF THE TRANSFORMER ARCHITECTURE
 
 
 
-VISION TRANSFORMER 
+## VISION TRANSFORMER 
 
 The Vision Transformer (ViT) is an adaption of the transformer architecture for computer vision tasks. The ViT applies the self attention mechanism of the Transformer to image patches , allowing the model to attend to different parts of the image and learn long – range dependencies between patches.
 
