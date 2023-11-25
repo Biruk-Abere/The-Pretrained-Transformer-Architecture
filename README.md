@@ -123,11 +123,11 @@ And we also come up with a second attention weights, let’s call it α<1,2> whi
 
 Questions :- 
 
-    How exactly is this context defined ? 
+   • How exactly is this context defined ? 
      
-    How do we compute this attention weight alpha ? 
-      
-    How does the attention model solve the problem of the encoder and decoder, in the translation of longer sentences ?
+   • How do we compute this attention weight alpha ? 
+  
+   • How does the attention model solve the problem of the encoder and decoder, in the translation of longer sentences ?
 
 The α<t,t’> allows it on every time step to look only at a local window of the French sentence to pay attention to when generating a specific English word. Now, let’s formalize the attention model. And for the forward recurrence we would have a(forward)  and a(backward) for the backward recurrence. Technically, a<o> in the forward step and a<6> for the backward step will be a vector of zeros and at every time step even though we have the features computed from the forward recurrence and from the backward recurrence in the bi-directional RNN (a<0> forward , a<6> backward), we are going to use a<t’> for both of these concatenated together. 
 
@@ -172,6 +172,8 @@ Although attention enabled the production of much better translations, there was
 
 ## SELF ATTENTION MECHANISM
 
+Questions :- 
+
     • What is self attention ? 
       
     • What makes self attention different from the original attention mechanism ? 
@@ -194,7 +196,7 @@ To understand transformer network, we must first see two basic concepts :-
 
 The goal of self attention is, if we have say a sentence of five words, we will end up computing five rich representations for this five words, was going to write A<1> , A<2> , A<3> , A<4> , A<5> and this will be an attention based way of computing representations for all of the words in a sentence in parallel. Then the multi head attention is basically a for loop over the self attention process so we need up with multiple versions of these representations and it turns out these can be used for machine translations or other NLP tasks to create effectiveness. So first let’s see self attention which provides a very rich representation of the words. 
 
-**Let’s use our running example :- **
+**Let’s use our running example :-**
 
         X<1>      X<2>          X<3>             X<4>              X<5>
 
@@ -206,8 +208,10 @@ Depending on how we’re thinking of l'Afrique we may choose to represent what A
 
 The main difference is that in every word we have  three values called the query, key and value; these vectors are the key inputs to computing the attention value for each word. Our first step is we are going to associate each of the words with values called query, key and value pairs. We are going to see how well the queries and keys match, but all of them (q , k , v) are vectors. 
 
+Question:-
 
-What does q,k,v represent in the self attention mechanism of the Transformer Architecture ?
+    • What does q,k,v represent in the self attention mechanism of the Transformer Architecture ?
+
 
 In the self attention mechanism of the Transformer architecture q , k , and v are known as the query, key and value vectors respectively. 
 
@@ -231,9 +235,9 @@ If X<3> is the word embedding for l’Afrique, the way this vector is computed i
 These matrices Wq , Wk , Wv  are parameters of this learning algorithm and they allow you to pull these query, key and value vectors for each word but what are these query, key and value. We can think of them as a loose analogy to databases where we can have queries and key – value pairs.  
 
 
-            X<1>  X<2>       X<3>       X<4>      X<5>
+        X<1>  X<2>       X<3>       X<4>      X<5>
 
-            Jane    Visite       l’Afrique      en        Septmbre
+        Jane    Visite       l’Afrique      en        Septmbre
 
 
 q<3> is a question that we get to ask about l’Afrique, so q<3> may represent like , what is happening there ? Is it a destination ? So what we are going to do is compute the inner product between q<3> and k<1> and this will tell us how good is an answer to the question of what’s happening in Africa and then we will compute the inner product between q<3> and k<2> and this intended to tell us how good is “visite” an answer to the question of “what Is happening in Africa” and so on for the other words, in the end the goal of this operation is to pull the most information that is needed to help us compute the most useful representation A<3>. 
@@ -242,7 +246,7 @@ So if K<1> represents that this word is a person because Jane is a person and K<
 
 So what we will do is take five values (q<3>k<1> , q<3>k<2>, q<3>k<3> , q<3>k<4> , q<3>k<5>) in and compute the softmax over them and in our example q<3>k<2> corresponding to word visite may be the largest value (that is why we are making that part of the word bold). 
 
-![Alt](image18.png)
+![Alt](image18.jpg)
 
 Now after computing the softmax , we are going to multiply with the value vector for each word and then finally we sum it up and so all of these values will give us A<3>. And then we are going to multiply with the value vector for each word and then finally we sum it up.
 
@@ -294,10 +298,10 @@ Maybe the third question we now want to ask as represented by wq3 , wk3 , wv3 is
 
 And we can think of each of these heads as a different feature, and when we pass these features to a new network we can calculate a very rich representation of the sentence. Calculating this computations for the three heads or the eight heads or whatever the number, the concatenation of these three value or 8 values is used to compute the output of the multi head attention and so the final value is the concatenation of all of these h heads and then finally multiplied by a matrix W0.
 
-Question :-
+Questions :-
  
-- How does the concatenation work ?
-- What is the point of multiplying it by Wo ?
+    • How does the concatenation work ?
+    • What is the point of multiplying it by Wo ?
 
 So doing self attention multiple times, we now understand the multi-head attention mechanism, which lets us ask multiple questions for every single word and learn a much richer and much better representation for every word. 
 
@@ -311,9 +315,11 @@ In the context of the attention mechanism, after the outputs from different head
 
 Let’s say that the concatenated attention outputs have a shape (batch_size , sequence_length(T) , num_attention_heads(h) * attention_head_size(dv)) , where num_attention_heads is the number of attention heads and attention_head_size is the dimensionality of each attention head output. The weight matrix W0 has a shape of (num_attention_heads(h) * attention_head_size(dv) , output_dimension ) , where output_dimension is the desired dimensionality of the final output. 
 
-Wo = (h*dv , output_dimension)
-concat * wo = Linear transformed output
-(T , h*dv) * (h*dv , output_dimension) = (T*output_dimension)
+
+        Wo = (h*dv , output_dimension)
+        concat * wo = Linear transformed output
+        (T , h*dv) * (h*dv , output_dimension) = (T*output_dimension)
+        
 
 To compute the linear transformation , we first reshape the concatenated attention outputs in to a 2D tensor of shape (batch_size * sequence_length , num_attention_heads * attention_head_size) , then we multiply this tensor by the weight matrix W0 , resulting in a tensor of shape (batch_size * sequence_length  , output_dimension)
 
@@ -326,6 +332,8 @@ In summary , multiplying the concatenated attention outputs by a weight matrix W
 
 ![Alt](image29.png)   
 
+Questions:-
+
     • What is the transformer architecture ?
       
     • Why do we need it ?
@@ -333,13 +341,9 @@ In summary , multiplying the concatenated attention outputs by a weight matrix W
     • How does the transformer architecture work ?
       
     • What features of transformers change the world of NLP by storm  ? 
-      
-    • How to implement it using PyTorch ?
+    • How does the transformer architecture learn long – range dependencies, capturing the relationship between words that are far apart in the input sentence?
 
 We already familiarized ourselves with the concept of self attention as implemented by the transformer attention mechanism for neural machine translation. We will now be shifting our focus to the details of the Transformer Architecture itself to discover how self attention can be implemented without relying on the use of recurrence and convolution. 
-
-
-Question :- How does the transformer architecture learn long – range dependencies, capturing the relationship between words that are far apart in the input sentence?
 
 The transformer architecture uses several mechanisms to learn long – range dependencies and capture relationships between words that are far apart in the input sentence. 
 
@@ -361,18 +365,21 @@ An important consideration to keep in mind is that the Transformer architecture 
 
 The positional encoding vectors are of the same dimension as the input embeddings and are generated using sine and cosine functions of different frequencies. Then, they are simply summed to the input embeddings in order to inject the positional information.
 
-Question :- How does the positional encoding work ? How is using sine and cosine functions used for generating the vectors of the positional embedding ? 
+Question :- 
 
-In languages , the order of the words and their position in a sentence really matters.  The meaning of the entire sentence can change if the words are re-ordered. When implementing NLP solutions, recurrent neural networks have a built mechanism that deals with the order of sequences. The transformer model however does not use recurrence or convolution and treats each data point as independent of the other. Since the Transformer architecture ditched the recurrence mechanism in favour of multi-head self attention mechanism. Avoiding the RNN’s methods of recurrence will result in massive speed up in the training time and theoretically , it can capture longer dependencies in a sentence. 
+    • How does the positional encoding work ? 
+    • How are sine and cosine functions used for generating the vectors of the positional embedding ? 
 
-The Transformer architecture , introduced in the paper “Attention is All You Need” by Vaswani et al(2017), replaces the recurrent neural network (RNN) mechanism typically used in sequence to sequence models with self attention mechanisms , which enables parallelization of computation. In traditional RNN , the hidden state at each time depends on the hidden state of the previous time step, which makes the computations sequential and not easily parallelizable. This can limit the performance of the model on longer sequences, since each time step must wait for the previous time step to compute.
+In languages, the order of the words and their position in a sentence really matters.  The meaning of the entire sentence can change if the words are re-ordered. When implementing NLP solutions, recurrent neural networks have a built mechanism that deals with the order of sequences. The transformer model however does not use recurrence or convolution and treats each data point as independent of the other. Since the Transformer architecture ditched the recurrence mechanism in favour of multi-head self attention mechanism. Avoiding the RNN’s methods of recurrence will result in massive speed up in the training time and theoretically, it can capture longer dependencies in a sentence. 
+
+The Transformer architecture, introduced in the paper “Attention is All You Need” by Vaswani et al(2017), replaces the recurrent neural network (RNN) mechanism typically used in sequence to sequence models with self attention mechanisms, which enables parallelization of computation. In traditional RNN, the hidden state at each time depends on the hidden state of the previous time step, which makes the computations sequential and not easily parallelizable. This can limit the performance of the model on longer sequences, since each time step must wait for the previous time step to compute.
 
 In contrast, the Transformer architecture utilizes a self attention mechanism, which allows the model to process all input tokens in parallel. Specifically, the model computes the attention score for each token in the input sequence based on its relationship with every other token in the sequence. The attention scores are used to weigh the importance of each token, which are then used to compute a weighted sum of all tokens in the sequence. This weighted sum, which captures the most relevant information from the input sequence, is then used as input to the subsequent layers of the model. 
 
-Since the attention mechanism considers all tokens in the input sequence in parallel, the Transformer architecture is more efficient and faster than traditional RNNs, and can process longer sequences without sacrificing performance. Additionally , the Transformer architecture has become a popular choice for various natural language processing tasks such as machine translation ,text generation , and language understanding , due to its superior performance and parallelizability. Here, positional information is added to the model explicitly to retain the information regarding the order of words in a sentence, positional encoding is the scheme through which the knowledge of the order of objects in a sequence is maintained. 
+Since the attention mechanism considers all tokens in the input sequence in parallel, the Transformer architecture is more efficient and faster than traditional RNNs, and can process longer sequences without sacrificing performance. Additionally, the Transformer architecture has become a popular choice for various natural language processing tasks such as machine translation,text generation, and language understanding, due to its superior performance and parallelizability. Here, positional information is added to the model explicitly to retain the information regarding the order of words in a sentence, positional encoding is the scheme through which the knowledge of the order of objects in a sequence is maintained. 
 
 
-## HOW DOES POSITIONAL ENCODING WORKS ?
+## HOW POSITIONAL ENCODING WORKS
 
 The Transformer architecture uses a positional encoding mechanism to inject position information into the input sequence so that the self attention mechanism can differentiate between tokens based on their position in the sequence. Since the self attention mechanism in the Transformer does not consider the order of the input sequence, it is important to incorporate the position of each token into the input representation. The positional encoding achieves this by adding a vector to the embedding of each token that encodes the position in the sequence. 
 
@@ -384,7 +391,9 @@ Where “pos” is the position of the token in the sequence , “I” refers to
 
 The positional encoding is added to the input embedding at the beginning of the network and the resulting vectors are fed to the self attention layers. The self attention mechanism can then differentiate between tokens based on both their semantic meaning and their position in the sequence. The positional encoding mechanism allows the Transformer to incorporate positional information into the input sequence without disrupting the parallelizability of the model. 
 
-Why are we using a sinusoidal function for generating the positional encoding ? 
+Question:-
+
+    • Why do we use a sinusoidal function for generating the positional encoding ? 
 
 The Transformer architecture uses a sinusoidal function for generating positional encodings because it provides a fixed, continuous encoding for each position in the sequence that is easily learnable by the model. A key requirement of the positional encoding function is that it must be fixed and known in advance, so that it can be added to the input embeddings before the model is trained. The use of a fixed positional encoding allows the model to generalize well to input sequences of different lengths and extrapolate to longer sequences during inference. 
 
@@ -402,7 +411,9 @@ So what we are going to do is, we are going to embed some arbitrary word and the
 
 So our positional encoding formula uses sines and cosines and in the formula pos refers to the position of the word and “I” refers to the index of a hidden vector. So in the first formula , 2i refers for the even index of the vector and in the second formula 2i + 1 refers for odd index of the vector. So for all of the even indexes in the word one , we will use the first formula by making the position (pos) = 1  and for all of the odd indexes in the word one , we will use the second formula by making the position (pos) = 1
 
-Question :- why do we use sine for even indices and cos for odd indices ?
+Question :- 
+    
+    • Why do we use sine for even indices and cos for odd indices ?
 
 In the positional encoding used in the transformer model in natural language processing , sine and cosine functions are used to generate different positional embeddings for each position in a sequence. Specifically , sine and cosine functions with different frequencies are used to encode the position of each token in the sequence. 
 
@@ -410,7 +421,9 @@ The choice of using sine for even indices and cosine for odd indices is somewhat
 
 By using sine and cosine functions with different frequencies , we can ensure that the positional embeddings for each position are unique and can be easily distinguished by the model. 
 
-Why do we need the denominator to be 10000 ? 
+Question:-
+
+    • Why do we need the denominator to be 10000 ? 
 
 The reason we use "10000" in the formula is to make sure each word gets a very distinct wave pattern. Imagine if each word in a sentence was given a unique sound wave—words closer to the beginning of the sentence would have slower waves, and words towards the end would have faster waves. By using "10000," we're able to create a wide range of these waves, so each position from the first word to the last gets a unique pattern. This helps the Transformer model understand which word comes first, which comes second, and so on, without getting confused. In other words, "10000" helps create a broad spectrum of unique position signals so the model can learn the order of words effectively.
 
@@ -428,7 +441,9 @@ The encoder consists of a stack of N = 6 identical layers , where each layer is 
 
 FFN(x) =ReLU(w1x + b1) w2 + b2
 
-Question :- Why do we need this repeated six layers ? 
+Question :- 
+    
+    • Why do we need this repeated six layers ? 
 
 The Transformer architecture for natural language processing tasks includes both an encoder and decoder. The encoder is responsible for processing the input sequence , while the decoder generates the output sequence. The encoder uses a stack of N identical layers , where N is typically set to 6 or more. There are several reasons why a stack of multiple layers is needed in the encoder :- 
 
@@ -440,11 +455,15 @@ The Transformer architecture for natural language processing tasks includes both
 
 So the stack of N = 6 , identical layers in the encoder of the Transformer architecture is needed to capture increasingly complex and long – range dependencies in the input sequence , make the model more robust to noise , and increase the depth of the model to learn more complex functions. 
 
-Question:- What advantage will they give when the weights differ in those six layers ? 
+Question:- 
+
+    • What advantage will they give when the weights differ in those six layers ? 
 
 Since each layer can perform different types of processing on the input , it allows the model to learn multiple representations of the same input. The six layers of the transformer encoder apply the same linear transformations to all the words in the input sequence , but each layer employs different weight ( w1 , w2 ) and bias ( b1 , b2 ) parameters to do so. 
 
-Question :- What advantage will this residual connection give in the transformer architecture ? 
+Question :-
+
+    • What is the advantage of the residual connection in the transformer architecture ? 
 
 ![Alt](image4.png)
 
@@ -458,14 +477,19 @@ The residual connection is an important component of the Transformer architectur
 
 In summary , the residual connection in the encoder part of the Transformer architecture provides several advantages , including improved gradient propagation , stabilization of the learning process , and feature reuse. These advantages can help the Transformer architecture achieve state of the art performance on a wide range of natural language processing tasks. 
 
-Question :- How are we going to add the skip connection mathematically ? 
+Question :- 
+
+    • How are we going to add the skip connection mathematically ? 
 
 Each sub layer is also succeeded by a normalization layer , layer norm (.) , which normalizes the sum of computed between the sub layer input x and the output generated by the sublayer(x)
 
-layer norm (x + sub layer(x))
+        layer norm (x + sub layer(x))
 
 
-Question :- What feature will this normalization add ? 
+Question :-
+
+
+    • What feature will this normalization add ? 
 
 The transformer architecture for natural language processing tasks includes layer normalization in the encoder part , specifically in each sub – layer of the Transformer layer. Layer normalization has several advantages.
 
@@ -486,7 +510,9 @@ In summary , normalization helps prevent overfitting by reducing the sensitivity
 In summary, layer normalization in the encoder part of the Transformer architecture provides several advantages, including improved training stability, improved generalization, and improved performance on natural language processing tasks. These advantages can help the Transformer architecture achieve state of the art performance on a wide range of natural language processing tasks. 
 
 
-Question :- What is the advantage of these fully connected neural networks ? 
+Question :-
+    
+    • What is the advantage of the fully connected neural networks ? 
 
 The Transformer architecture for natural language processing tasks includes a fully connected neural network in the encoder part, specifically in each Transformer layer. This fully connected network is known as the “ feed forward network ” and has several advantages. 
 
@@ -498,7 +524,9 @@ The Transformer architecture for natural language processing tasks includes a fu
 
 In summary , the feed forward network in the encoder of the Transformer architecture provides a non – linear transformation that allows the model to learn complex relationships between tokens, reduces the dimensionality of the input to improve computational efficiency , and can be used to incorporate other types of features in to the model. These advantages can help the Transformer architecture achieve state of the art performance on a wide range of natural language processing tasks. 
 
-Question :- How does layer normalizing the activation layer of the model reduce vanishing gradients ?
+Question :- 
+
+    • How does layer normalizing the activation layer of the model reduce vanishing gradients ?
 
 Layer normalization helps to reduce the impact of vanishing gradients in deep neural networks , including the Transformer architecture , by ensuring that the activations of each layer are normalized and have a consistent distribution. Vanishing gradients occur when the gradients propagated through the layers of a deep neural network become very small , making it difficult to update the parameters of the network through back-propagation. This can be a significant problem in deep models with many layers , as the gradients can become too small to update the weights of the lower layers effectively. 
 
@@ -516,7 +544,9 @@ The decoder shares several similarities with the encoder. The decoder also consi
 
 1) The first sublayer receives the previous output of the decoder stack, augments it with positional information and implements multi – head self attention over it. While the encoder is designed to attend to all words in the input sequence regardless of their position in the sequence , the decoder is modified to attend only to the preceding words. Hence , the prediction for a word at position I can only depend on the known outputs for the words that come before it in the sequence.
 
-Question :- Why do we need positional encoding for the decoder ? 
+Question :- 
+
+    • Why do we need positional encoding for the decoder ? 
 
 We need positional encoding for the decoder in the Transformer architecture for the same reason we need it for the encoder , to provide the decoder with information about the relative positions of the input tokens. 
 
@@ -526,15 +556,17 @@ Without positional encoding, the decoder would have no information about the rel
 
 Therefore, like the encoder, the decoder in the Transformer architecture also uses positional encoding to encode the relative positions of the input tokens. The positional encoding is added to the decoder’s input embeddings before they are fed into the decoder layers , allowing the decoder to attend to the input sequence correctly and generate an appropriate output sequence. 
 
-Question :- What is the job of this masked multi – head attention specifically ?
+Question :- 
 
-The job of the masked multi-head attention mechanism in the decoder part of the Transformer architecture is to allow the decoder to attend to the previously generated tokens in the output sequence , while preventing it from attending to future tokens.
+    • What does masked multi – head attention actually do ?
+
+The masked multi-head attention mechanism in the decoder part of the Transformer architecture allows the decoder to attend to the previously generated tokens in the output sequence , while preventing it from attending to future tokens.
 
 In the Transformer architecture , the decoder generates the output sequence one token at a time , in an auto-regressive manner. This means that at each step , the decoder generates a new token based on the previously generated tokens in the sequence. To generate each token , the decoder attends to the encoded input sequence produced by the encoder , as well as the previously generated tokens in the output sequence. 
 
 However , during training , we do not want the decoder to have access to future tokens in the output sequence , as this would result in data leakage and prevent the model from learning to generate outputs in a sequential and auto regressive manner. To prevent the decoder from attending to future tokens , the masked multi head attention mechanism is used. 
 
-![Alt](image10.png)  
+![Alt](image10.jpg)  
        
 The masked multi head attention mechanism works by masking out the attention scores for future tokens in the output sequence. Specifically , a binary mask is applied to the attention scores such that future tokens are assigned a score of negative infinity , which effectively prevents the decoder from attending to them. This ensures that the decoder can only attend to the previously generated tokens and the encoded input sequence when generating each new token in the output sequence. 
 
@@ -542,7 +574,9 @@ Overall , the masked multi – head attention mechanism is an important componen
 
 2) The second layer implements a multi – head self attention mechanism similar to the one implemented in the first sublayer of the encoder. On the decoder side, this multi – head mechanism receives the queries from the previous decoder sub layer and the keys and the values from the output of the encoder. This allows the decoder to attend to all the words in the input sequence.
 
-Question :- Why are we receiving the keys and queries from the encoder and the queries from the decoder? 
+Question :- 
+
+    • Why are we receiving the keys and values from the encoder and the queries from the decoder? 
 
 Imagine you're translating a sentence from English to French. You read the English sentence (the input) and start thinking of the French words (the output). The process of translating involves remembering what each English word means and how it relates to the French words you're choosing.
 In the Transformer model:
@@ -567,7 +601,7 @@ In essence, the linear layers in the decoder are there to shape and refine the d
 
 5) The softmax :- The softmax function in the decoder of the Transformer architecture plays a critical role in the final step of generating output, such as a translated word in a sentence. Here's the point of using softmax:
 
-![Alt](image22.png)
+![Alt](image22.jpg)
 
 * **Probabilities**: Softmax converts the raw output scores (also known as logits) from the linear layer into probabilities. It ensures that all the output values are positive and sum up to 1, making them a proper probability distribution.
 
