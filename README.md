@@ -129,6 +129,7 @@ Questions :-
   
    • How does the attention model solve the problem of the encoder and decoder, in the translation of longer sentences ?
 
+
 The α<t,t’> allows it on every time step to look only at a local window of the French sentence to pay attention to when generating a specific English word. Now, let’s formalize the attention model. And for the forward recurrence we would have a(forward)  and a(backward) for the backward recurrence. Technically, a<o> in the forward step and a<6> for the backward step will be a vector of zeros and at every time step even though we have the features computed from the forward recurrence and from the backward recurrence in the bi-directional RNN (a<0> forward , a<6> backward), we are going to use a<t’> for both of these concatenated together. 
 
         a<t’> = (a<t’> forward + a<t’> backward)
